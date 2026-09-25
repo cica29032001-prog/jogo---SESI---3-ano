@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Simulado SESI – 3º Ano | Jogo</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef3f8;color:#172033}
+.app{max-width:760px;margin:auto;padding:18px}
+.header{background:#fff;border-radius:22px;padding:20px;box-shadow:0 5px 20px #00000012;margin-bottom:14px}
+h1{margin:0;font-size:25px}.sub{margin:6px 0 0;color:#5e6878}
+.stats{display:flex;gap:8px;margin-top:15px}.stat{flex:1;background:#f3f6fa;border-radius:14px;padding:10px;text-align:center}.stat b{display:block;font-size:19px}.stat span{font-size:12px;color:#667}
+.progress{height:9px;background:#dce3ec;border-radius:99px;margin:12px 0 0;overflow:hidden}.bar{height:100%;width:0;background:#4169e1}
+.card{background:#fff;border-radius:22px;padding:20px;box-shadow:0 5px 20px #00000012}
+.tag{display:inline-block;background:#e9efff;padding:7px 11px;border-radius:99px;font-weight:bold;font-size:13px}
+.question{font-size:20px;line-height:1.45;font-weight:700;margin:15px 0}
+.texto{background:#f7f9fc;border-left:4px solid #4169e1;padding:14px;border-radius:10px;line-height:1.55;margin:12px 0}
+.opt{display:block;width:100%;min-height:55px;margin:9px 0;border:2px solid #d9e0e9;border-radius:14px;background:#fff;text-align:left;padding:12px 14px;font-size:16px;color:#172033}
+.opt:active{transform:scale(.99)}.opt.correct{background:#e8f7ed;border-color:#38a169}.opt.wrong{background:#fff0f0;border-color:#d9534f}
+.feedback{padding:13px;border-radius:13px;margin-top:12px;font-weight:bold}.ok{background:#e8f7ed}.no{background:#fff0f0}
+.next,.start{width:100%;min-height:52px;border:0;border-radius:14px;background:#4169e1;color:#fff;font-size:17px;font-weight:bold;margin-top:14px}
+.center{text-align:center}.emoji{font-size:52px}.score{font-size:46px;font-weight:900;margin:12px 0}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+<h1>🎯 SIMULADO SESI – 3º ANO</h1>
+<div class="sub">ETAPA 2 – TEXTOS MÉDIOS E QUESTÕES DE INFERÊNCIA</div>
+<div class="stats"><div class="stat"><b id="pontos">0</b><span>Pontos</span></div><div class="stat"><b id="num">0/20</b><span>Questão</span></div><div class="stat"><b id="acertos">0</b><span>Acertos</span></div></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+</div>
+<div class="card" id="game"></div>
+</div>
+<script>
+const qs=[
+{area:"LÍNGUA PORTUGUESA",texto:"TEXTO 1 – O MISTÉRIO DA CAIXA AZUL",passagem:"Na saída da escola, Lucas percebeu uma pequena caixa azul perto de um banco do pátio. Ele a pegou e viu que havia um nome escrito em um pedaço de papel: “Para quem encontrar”.<br><br>Curioso, Lucas abriu a tampa. Dentro havia três sementes, um pouco de terra em um saquinho e um bilhete: “Plante, cuide e descubra o que pode nascer.”<br><br>Lucas pensou em levar a caixa para casa, mas decidiu perguntar à professora se ela sabia quem a havia deixado ali. A professora sorriu e disse que aquela era uma atividade preparada pela turma do terceiro ano para iniciar uma pequena horta na escola.<br><br>Lucas devolveu a caixa e pediu para participar. Naquela tarde, ele e seus colegas escolheram um lugar ensolarado para plantar as sementes.",q:"Por que Lucas ficou curioso ao encontrar a caixa?",a:["Porque ela estava cheia de brinquedos.","Porque havia um nome e um bilhete misterioso.","Porque a professora mandou que ele a abrisse.","Porque ele já sabia que era uma atividade da escola."],c:1},
+{area:"LÍNGUA PORTUGUESA",q:"Qual era a finalidade da caixa?",a:["Guardar materiais de desenho.","Esconder um presente para Lucas.","Iniciar uma atividade de plantio na escola.","Levar sementes para a casa dos alunos."],c:2},
+{area:"LÍNGUA PORTUGUESA",q:"O que podemos concluir sobre Lucas a partir de suas atitudes?",a:["Ele preferia ficar sozinho.","Ele agiu sem procurar saber o que estava acontecendo.","Ele demonstrou curiosidade e depois decidiu participar.","Ele não gostava de atividades realizadas na escola."],c:2},
+{area:"LÍNGUA PORTUGUESA",q:"Qual acontecimento representa a resolução do problema apresentado no início do texto?",a:["Lucas encontrou a caixa.","Lucas abriu a caixa.","Lucas perguntou à professora e descobriu a finalidade da caixa.","Lucas viu o nome escrito no papel."],c:2},
+{area:"LÍNGUA PORTUGUESA",texto:"TEXTO 2 – UMA TARDE DIFERENTE",passagem:"No sábado, Sofia foi à casa da tia para brincar. Ao chegar, percebeu que a prima estava sentada no quintal olhando para algumas folhas de papel.<br><br>— O que você está fazendo? — perguntou Sofia.<br>— Estou tentando descobrir de que árvore são estas folhas — respondeu a prima.<br><br>As duas começaram a observar os formatos, as cores e os tamanhos das folhas. Depois, caminharam pelo quintal procurando árvores que tivessem folhas parecidas.<br><br>Quando encontraram uma árvore com folhas semelhantes, perceberam que algumas estavam no chão e outras ainda estavam nos galhos. Sofia sugeriu desenhar a árvore em um caderno para comparar as características. A brincadeira acabou se transformando em uma pequena investigação.",q:"O que fez a brincadeira das meninas se transformar em uma investigação?",a:["Elas decidiram ir embora do quintal.","Elas começaram a observar características das folhas e procurar a árvore correspondente.","A tia pediu que elas fizessem uma tarefa escolar.","Sofia encontrou um brinquedo no quintal."],c:1},
+{area:"LÍNGUA PORTUGUESA",q:"Qual informação está explícita no texto?",a:["As meninas estavam na escola.","A prima de Sofia queria descobrir de que árvore eram algumas folhas.","A tia havia plantado todas as árvores do quintal.","Sofia já conhecia todas as árvores."],c:1},
+{area:"LÍNGUA PORTUGUESA",q:"Na expressão “folhas semelhantes”, a palavra “semelhantes” indica folhas que são",a:["iguais em tudo.","muito diferentes.","parecidas.","menores."],c:2},
+{area:"LÍNGUA PORTUGUESA",texto:"TEXTO 3 – O RECADO",passagem:"“Não se esqueça!<br>A apresentação começará às 14 horas.<br>Cada participante deve levar seu crachá e uma garrafinha de água.<br>Local: salão da escola.”",q:"Qual informação NÃO aparece no recado?",a:["O horário da apresentação.","O local do evento.","Os materiais que os participantes devem levar.","O nome de cada participante."],c:3},
+{area:"LÍNGUA PORTUGUESA",texto:"TEXTO 4 – POEMA",passagem:"Pula a rã no lago,<br>canta o sabiá.<br>O vento passa leve,<br>a tarde vai chegar.",q:"Qual palavra do poema rima com “sabiá”?",a:["lago","leve","chegar","vento"],c:2},
+{area:"LÍNGUA PORTUGUESA",q:"Assinale a alternativa em que a separação silábica está correta.",a:["es-co-la","a-mi-go","brin-que-do","ár-vo-re"],c:2},
+{area:"MATEMÁTICA",q:"Uma escola recebeu 3 caixas com 125 lápis em cada uma. Depois, distribuiu 87 lápis entre as salas. Quantos lápis restaram?",a:["288","298","303","375"],c:1},
+{area:"MATEMÁTICA",q:"Observe os números: 409, 490, 904 e 940. Qual deles possui 9 centenas e 4 dezenas?",a:["409","490","904","940"],c:3},
+{area:"MATEMÁTICA",q:"Uma loja organizou os preços do menor para o maior: R$ 18, R$ 25, R$ 32 e R$ 29. Qual valor está fora da ordem e deve mudar de lugar?",a:["R$ 18","R$ 25","R$ 32","R$ 29"],c:2},
+{area:"MATEMÁTICA",q:"Pedro tinha 500 figurinhas. Deu 126 para um amigo e ganhou 75 de sua prima. Com quantas figurinhas ficou?",a:["349","424","449","451"],c:2},
+{area:"MATEMÁTICA",q:"Complete a sequência: 320, 340, 360, ____, 400. Qual é a regra?",a:["Diminuir 20.","Aumentar 10.","Aumentar 20.","Aumentar 40."],c:2},
+{area:"MATEMÁTICA",texto:"TABELA – LIVROS LIDOS",passagem:"<table style='width:100%;border-collapse:collapse;text-align:center'><tr><th style='border:1px solid #ccd5df;padding:7px'>Aluno</th><th style='border:1px solid #ccd5df;padding:7px'>Segunda</th><th style='border:1px solid #ccd5df;padding:7px'>Terça</th></tr><tr><td style='border:1px solid #ccd5df;padding:7px'>Lia</td><td style='border:1px solid #ccd5df;padding:7px'>2</td><td style='border:1px solid #ccd5df;padding:7px'>3</td></tr><tr><td style='border:1px solid #ccd5df;padding:7px'>Noah</td><td style='border:1px solid #ccd5df;padding:7px'>4</td><td style='border:1px solid #ccd5df;padding:7px'>2</td></tr><tr><td style='border:1px solid #ccd5df;padding:7px'>Bia</td><td style='border:1px solid #ccd5df;padding:7px'>1</td><td style='border:1px solid #ccd5df;padding:7px'>5</td></tr><tr><td style='border:1px solid #ccd5df;padding:7px'>Caio</td><td style='border:1px solid #ccd5df;padding:7px'>3</td><td style='border:1px solid #ccd5df;padding:7px'>1</td></tr></table>",q:"Quem leu a maior quantidade de livros somando segunda e terça-feira?",a:["Lia","Noah","Bia","Caio"],c:2},
+{area:"MATEMÁTICA",q:"Quantos livros foram lidos ao todo pelos quatro alunos na terça-feira?",a:["9","10","11","12"],c:2},
+{area:"MATEMÁTICA",q:"Uma caixa de presente tem formato parecido com uma lata de refrigerante. Qual sólido geométrico representa melhor esse formato?",a:["Cubo","Esfera","Cilindro","Pirâmide"],c:2},
+{area:"MATEMÁTICA",q:"João tinha R$ 30,00. Comprou um livro por R$ 17,00. Depois encontrou R$ 5,00 no bolso de sua mochila. Com quanto dinheiro ficou?",a:["R$ 12,00","R$ 13,00","R$ 17,00","R$ 18,00"],c:3},
+{area:"MATEMÁTICA",q:"Uma oficina acontecerá no dia 24 de outubro. Hoje é dia 20 de outubro. Quantos dias faltam para a oficina?",a:["2 dias","3 dias","4 dias","5 dias"],c:2}
+];
+
+let i=-1,score=0,hits=0,answered=false;
+const game=document.getElementById("game"),pontos=document.getElementById("pontos"),num=document.getElementById("num"),acertos=document.getElementById("acertos"),bar=document.getElementById("bar");
+function start(){i=0;score=0;hits=0;show()}
+function show(){
+answered=false;const x=qs[i];num.textContent=(i+1)+"/20";pontos.textContent=score;acertos.textContent=hits;bar.style.width=(i/20*100)+"%";
+game.innerHTML='<span class="tag">'+x.area+' • Questão '+(i+1)+'</span>'+
+(x.texto?'<div class="texto"><b>'+x.texto+'</b><br><br>'+x.passagem+'</div>':'')+
+'<div class="question">'+x.q+'</div><div id="opts"></div><div id="feed"></div>';
+x.a.forEach((v,n)=>{let b=document.createElement("button");b.className="opt";b.textContent=String.fromCharCode(65+n)+") "+v;b.onclick=()=>answer(n,b);document.getElementById("opts").appendChild(b)});
+}
+function answer(n,btn){
+if(answered)return;answered=true;const x=qs[i],bs=document.querySelectorAll(".opt");
+bs.forEach((b,k)=>{b.disabled=true;if(k===x.c)b.classList.add("correct")});
+const f=document.getElementById("feed");
+if(n===x.c){hits++;score+=10;btn.classList.add("correct");f.className="feedback ok";f.textContent="✅ Muito bem! Você acertou! +10 pontos."}
+else{btn.classList.add("wrong");f.className="feedback no";f.textContent="❌ Quase! A alternativa correta está destacada."}
+pontos.textContent=score;acertos.textContent=hits;
+let next=document.createElement("button");next.className="next";next.textContent=i===19?"🏆 Ver resultado":"➡️ Próxima questão";next.onclick=()=>{i===19?finish():(i++,show())};game.appendChild(next);
+}
+function finish(){
+bar.style.width="100%";num.textContent="20/20";
+game.innerHTML='<div class="center"><div class="emoji">🏆</div><h2>Desafio concluído!</h2><div class="score">'+score+' pontos</div><p>Você acertou <b>'+hits+'</b> de 20 questões.</p><button class="start" id="again">🔄 Jogar novamente</button></div>';
+document.getElementById("again").onclick=start;
+}
+game.innerHTML='<div class="center"><div class="emoji">🎮</div><h2>Desafio SESI – 3º Ano</h2><p>20 questões do simulado original. Escolha uma alternativa por vez.</p><button class="start" id="begin">🚀 Começar o jogo</button></div>';
+document.getElementById("begin").onclick=start;
+</script>
+</body>
+</html>
